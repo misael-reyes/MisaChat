@@ -70,4 +70,7 @@ dependencies {
 
     // dependencias para las corrutinas
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1"
+
+    // dependencias para el splash screen
+    implementation 'androidx.core:core-splashscreen:1.0.0'
 }

@@ -1,11 +1,12 @@
-package com.example.misachat
+package com.example.misachat.iu.chat
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.misachat.R
 
-class MainActivity : AppCompatActivity() {
+class ChatActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_chat)
     }
 }
