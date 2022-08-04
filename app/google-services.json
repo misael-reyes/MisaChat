@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1002092447194",
+    "project_id": "misachat-2022",
+    "storage_bucket": "misachat-2022.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1002092447194:android:bcfc8e775636476e62ece3",
+        "android_client_info": {
+          "package_name": "com.example.misachat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1002092447194-cmh5r8ohguj6fe6q2l4ub7kv6ctuia7m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD8Ekqf5gs-_u-77x24r1_B_j4nG9J8oG8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1002092447194-cmh5r8ohguj6fe6q2l4ub7kv6ctuia7m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
