@@ -7,4 +7,6 @@
     <string name="register">Registrarse</string>
     <string name="login">Acceder</string>
     <string name="logout">Cerrar Sesión</string>
+    <string name="btn_google">Continuar con Google</string>
+    <string name="prefs_file">com.example.misachat.PREFERENCE_FILE_KEY</string>
 </resources>

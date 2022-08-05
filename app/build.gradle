@@ -72,6 +72,9 @@ dependencies {
     // When using the BoM, you don't specify versions in Firebase library dependencies
     implementation 'com.google.firebase:firebase-auth-ktx'
 
+    // dependency for the google play service library (authentication with google)
+    implementation 'com.google.android.gms:play-services-auth:20.2.0'
+
     // dependencias para las corrutinas
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1"
 
