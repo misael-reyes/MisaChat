@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">MisaChat</string>
+
+    <string name="title_email">Email</string>
+    <string name="title_password">Contraseña</string>
+    <string name="required">* Requerido</string>
+    <string name="register">Registrarse</string>
+    <string name="login">Acceder</string>
+    <string name="logout">Cerrar Sesión</string>
 </resources>
