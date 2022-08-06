@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "1002092447194-q00qc562lfi821vobntoln5eg50132cq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.misachat",
+            "certificate_hash": "c7317e4ccb2548a14912ab16e034afbda1eb9b83"
+          }
+        },
+        {
           "client_id": "1002092447194-cmh5r8ohguj6fe6q2l4ub7kv6ctuia7m.apps.googleusercontent.com",
           "client_type": 3
         }
