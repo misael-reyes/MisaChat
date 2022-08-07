@@ -80,4 +80,10 @@ dependencies {
 
     // dependencias para el splash screen
     implementation 'androidx.core:core-splashscreen:1.0.0'
+
+    // dependencia para las activitys
+    implementation("androidx.activity:activity-ktx:1.5.1")
+
+    // dependencia para integrar auth con facebook
+    implementation 'com.facebook.android:facebook-android-sdk:[4,5)'
 }

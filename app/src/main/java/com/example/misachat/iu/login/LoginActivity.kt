@@ -4,19 +4,18 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import android.widget.Toast
+import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import com.example.misachat.R
 import com.example.misachat.databinding.ActivityLoginBinding
-import com.example.misachat.iu.chat.ChatActivity
-import com.example.misachat.iu.chat.ProviderType
+import com.example.misachat.iu.listOfChats.ListOfChatsActivity
+import com.example.misachat.iu.listOfChats.ProviderType
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.api.ApiException
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.GoogleAuthProvider
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
 
     private val GOOGLE_SIGN_IN = 100
@@ -24,20 +23,28 @@ class LoginActivity : AppCompatActivity() {
     // binding
     private lateinit var binding: ActivityLoginBinding
 
+    // ViewModel
+    private val viewModel: LoginViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         // setup
-        initListener()
+        setup()
         session()
-
     }
 
     override fun onStart() {
         super.onStart()
         binding.authLayout.visibility = View.VISIBLE
+    }
+
+    private fun setup() {
+        title = "Autenticación"
+        initListeners()
+        initObservers()
     }
 
     private fun session() {
@@ -49,56 +56,24 @@ class LoginActivity : AppCompatActivity() {
         if (email != null && provider != null) {
             // existe sesion
             binding.authLayout.visibility = View.INVISIBLE
-            showChat(email, ProviderType.valueOf(provider))
+            showListOfChats(email, ProviderType.valueOf(provider))
         }
     }
 
-    private fun initListener() {
-        title = "Autenticación"
+    private fun initListeners() {
+
         binding.btnRegister.setOnClickListener {
-            // por el momento solo validamos que los textos no esten vacios
-            if (binding.textInputEmail.editText?.text!!.isNotEmpty() && binding.textInputPassword.editText?.text!!.isNotEmpty()) {
-                // podemos registrar a nuestro usuario
-                FirebaseAuth.getInstance()
-                    .createUserWithEmailAndPassword(
-                        binding.textInputEmail.editText?.text.toString(),
-                        binding.textInputPassword.editText?.text.toString()
-                    ).addOnCompleteListener {
-                        // para saber si se pudo registrar o hubo un error
-                        if (it.isSuccessful) {
-                            // nos vamos a la sala del chat
-                            showChat(it.result?.user?.email ?: "", ProviderType.BASIC)
-                        } else {
-                            Toast.makeText(this, "No se pudo registrar", Toast.LENGTH_SHORT).show()
-                        }
-                    }
-            } else {
-                binding.textInputEmail.error = "no puede estar en blanco"
-                binding.textInputPassword.error = "no puede estar en blanco"
-            }
+            viewModel.registerUserWithEmailAndPassword(
+                binding.textInputEmail.editText?.text.toString(),
+                binding.textInputPassword.editText?.text.toString()
+            )
         }
 
         binding.btnLogin.setOnClickListener {
-            if (binding.textInputEmail.editText?.text!!.isNotEmpty() && binding.textInputPassword.editText?.text!!.isNotEmpty()) {
-                // accedemos
-                FirebaseAuth.getInstance()
-                    .signInWithEmailAndPassword(
-                        binding.textInputEmail.editText?.text.toString(),
-                        binding.textInputPassword.editText?.text.toString()
-                    ).addOnCompleteListener {
-                        // para saber si se pudo acceder o hubo un error
-                        if (it.isSuccessful) {
-                            // nos vamos a la sala del chat
-                            showChat(it.result?.user?.email ?: "", ProviderType.BASIC)
-                        } else {
-                            Toast.makeText(this, "Credenciales invalidas", Toast.LENGTH_SHORT)
-                                .show()
-                        }
-                    }
-            } else {
-                binding.textInputEmail.error = "no puede estar en blanco"
-                binding.textInputPassword.error = "no puede estar en blanco"
-            }
+            viewModel.loginWithEmailAndPassword(
+                binding.textInputEmail.editText?.text.toString(),
+                binding.textInputPassword.editText?.text.toString()
+            )
         }
 
         binding.btnGoogle.setOnClickListener {
@@ -119,8 +94,26 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun showChat(email: String, provider: ProviderType) {
-        val intent = Intent(this, ChatActivity::class.java).apply {
+    private fun initObservers() {
+        viewModel.showErrorDialog.observe(this) { message ->
+            showAlert(message)
+        }
+
+        viewModel.showErrorInEmail.observe(this) {
+            binding.textInputEmail.error = it
+        }
+
+        viewModel.showErrorInPassword.observe(this) {
+            binding.textInputPassword.error = it
+        }
+
+        viewModel.navigateToListOfChats.observe(this) {
+            showListOfChats(it.email, it.provider)
+        }
+    }
+
+    private fun showListOfChats(email: String, provider: ProviderType) {
+        val intent = Intent(this, ListOfChatsActivity::class.java).apply {
             putExtra("email", email)
             putExtra("provider", provider.name)
         }
@@ -132,35 +125,15 @@ class LoginActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         // resultado retornado de lanzar el intent de GoogleSignInApi.getSignInIntent()
+        viewModel.loginWithGoogle(requestCode, resultCode, data, GOOGLE_SIGN_IN)
+    }
 
-        if (requestCode == GOOGLE_SIGN_IN) {
-            // la respuesta de esta activity corresponde con la de la autenticacion de google
-            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-
-            try {
-                // recuperamos la cuenta
-                val account = task.getResult(ApiException::class.java)
-
-                if (account != null) {
-                    // recuperamos la credencial
-
-                    val credential = GoogleAuthProvider.getCredential(account.idToken, null)
-
-                    FirebaseAuth.getInstance().signInWithCredential(credential).addOnCompleteListener {
-                        // para saber si se pudo acceder o hubo un error
-                        if (it.isSuccessful) {
-                            // nos vamos a la sala del chat
-                            showChat(account.email ?: "", ProviderType.GOOGLE)
-                        } else {
-                            Toast.makeText(this, "No se pudo autenticar el email", Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                }
-            } catch (e: ApiException) {
-                Log.i("prueba", e.message.toString())
-                Toast.makeText(this, "No se pudo autenticar el email", Toast.LENGTH_SHORT).show()
-            }
-
-        }
+    private fun showAlert(message: String) {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Error")
+        builder.setMessage(message)
+        builder.setPositiveButton("Aceptar", null)
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
     }
 }
