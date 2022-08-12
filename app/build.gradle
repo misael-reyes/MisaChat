@@ -75,6 +75,9 @@ dependencies {
     // dependency for the google play service library (authentication with google)
     implementation 'com.google.android.gms:play-services-auth:20.2.0'
 
+    // dependency for firestore
+    implementation 'com.google.firebase:firebase-firestore-ktx'
+
     // dependencias para las corrutinas
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1"
 
