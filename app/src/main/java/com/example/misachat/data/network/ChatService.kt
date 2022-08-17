@@ -33,4 +33,10 @@ class ChatService @Inject constructor(
             firebase.db.collection(CHAT_COLLECTION).document(chat.id).set(chat)
         }
     }
+
+    suspend fun getChatById(chatId: String): DocumentReference {
+        return withContext(Dispatchers.IO) {
+            firebase.db.collection(CHAT_COLLECTION).document(chatId)
+        }
+    }
 }

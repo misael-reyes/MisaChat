@@ -5,13 +5,13 @@
       <map>
         <entry key="..\:/Users/emisa/AndroidStudioProjects/MisaChat/app/src/main/res/drawable/bubble_corner_left.xml" value="0.37864583333333335" />
         <entry key="..\:/Users/emisa/AndroidStudioProjects/MisaChat/app/src/main/res/drawable/bubble_corner_right.xml" value="0.37864583333333335" />
-        <entry key="..\:/Users/emisa/AndroidStudioProjects/MisaChat/app/src/main/res/layout/activity_chat.xml" value="0.25" />
+        <entry key="..\:/Users/emisa/AndroidStudioProjects/MisaChat/app/src/main/res/layout/activity_chat.xml" value="0.17100371747211895" />
         <entry key="..\:/Users/emisa/AndroidStudioProjects/MisaChat/app/src/main/res/layout/activity_list_of_chats.xml" value="0.25" />
         <entry key="..\:/Users/emisa/AndroidStudioProjects/MisaChat/app/src/main/res/layout/activity_login.xml" value="0.25" />
         <entry key="..\:/Users/emisa/AndroidStudioProjects/MisaChat/app/src/main/res/layout/activity_login2.xml" value="0.3484375" />
         <entry key="..\:/Users/emisa/AndroidStudioProjects/MisaChat/app/src/main/res/layout/activity_main.xml" value="0.3625" />
         <entry key="..\:/Users/emisa/AndroidStudioProjects/MisaChat/app/src/main/res/layout/item_chat.xml" value="0.3451086956521739" />
-        <entry key="..\:/Users/emisa/AndroidStudioProjects/MisaChat/app/src/main/res/layout/item_message.xml" value="0.3451086956521739" />
+        <entry key="..\:/Users/emisa/AndroidStudioProjects/MisaChat/app/src/main/res/layout/item_message.xml" value="0.1" />
         <entry key="..\:/Users/emisa/AndroidStudioProjects/MisaChat/app/src/main/res/menu/menu.xml" value="0.25" />
       </map>
     </option>

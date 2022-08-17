@@ -35,7 +35,7 @@ class ListOfChatsViewModel @Inject constructor(
             getAllChatsUserUseCase(email).addOnSuccessListener {
                 _chats.value = it.toObjects(Chat::class.java)
             }
-            // esto es para escuchar cuando hayan agregado un nuevo chat
+            // esto es para escuchar cuando hayan agregado un nuevo chat (actualizacion en tiempo real)
             getChatsUseCase(email).addSnapshotListener{ chats, error ->
                 if (error == null) {
                     chats?.let {
