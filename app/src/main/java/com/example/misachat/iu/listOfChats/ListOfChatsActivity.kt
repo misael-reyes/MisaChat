@@ -87,7 +87,7 @@ class ListOfChatsActivity : AppCompatActivity() {
         }
 
         viewModel.isAdded.observe(this) {
-            navigateToChat(email ?: "", it.id)
+            navigateToChat(binding.etEmailChat.text.toString(), it.id)
         }
     }
 

@@ -78,6 +78,9 @@ dependencies {
     // dependency for firestore
     implementation 'com.google.firebase:firebase-firestore-ktx'
 
+    // dependency for firebase messaging
+    implementation 'com.google.firebase:firebase-messaging-ktx'
+
     // dependencias para las corrutinas
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1"
 

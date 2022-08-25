@@ -58,7 +58,7 @@ class ListOfChatsViewModel @Inject constructor(
 
         val chat = Chat(
             id = chatId,
-            name = "$user1[0] - $user2[0]",
+            name = user1[0] + " - " + user2[0],
             users = users
         )
 
