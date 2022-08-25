@@ -52,9 +52,13 @@ class ListOfChatsViewModel @Inject constructor(
         val chatId = UUID.randomUUID().toString()
         val users = listOf(user, otherUser)
 
+        // obtenemos los nombres de los usuarios
+        val user1 = user.split("@")
+        val user2 = otherUser.split("@")
+
         val chat = Chat(
             id = chatId,
-            name = "Chat con $otherUser",
+            name = "$user1[0] - $user2[0]",
             users = users
         )
 
