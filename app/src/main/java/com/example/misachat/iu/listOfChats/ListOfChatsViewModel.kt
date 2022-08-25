@@ -30,6 +30,9 @@ class ListOfChatsViewModel @Inject constructor(
     private val _isAdded = MutableLiveData<Chat>()
     val isAdded: LiveData<Chat> get() = _isAdded
 
+    private val _errorAdded = MutableLiveData<Boolean>()
+    val errorAdded: LiveData<Boolean> get() = _errorAdded
+
     fun getAllChatsUser(email: String) {
         viewModelScope.launch {
             getAllChatsUserUseCase(email).addOnSuccessListener {
@@ -48,6 +51,13 @@ class ListOfChatsViewModel @Inject constructor(
     }
 
     fun newChat(user: String, otherUser: String) {
+        if (otherUser.isNotEmpty())
+            addNewChat(user, otherUser)
+        else
+            _errorAdded.value = false
+    }
+
+    private fun addNewChat(user: String, otherUser: String) {
         // creamos un nuevo usuario para poder chatear
         val chatId = UUID.randomUUID().toString()
         val users = listOf(user, otherUser)

@@ -89,6 +89,10 @@ class ListOfChatsActivity : AppCompatActivity() {
         viewModel.isAdded.observe(this) {
             navigateToChat(binding.etEmailChat.text.toString(), it.id)
         }
+
+        viewModel.errorAdded.observe(this) {
+            if (!it) Toast.makeText(this, "No puede dejar el campo vacio", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun navigateToChat(email: String, chatId: String) {
