@@ -8,6 +8,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.misachat.domain.model.Chat
 import com.example.misachat.domain.useCase.*
+import com.example.misachat.utils.MyFirebaseMessagingService
+import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -47,7 +49,6 @@ class ListOfChatsViewModel @Inject constructor(
                 }
             }
         }
-
     }
 
     fun newChat(user: String, otherUser: String) {
