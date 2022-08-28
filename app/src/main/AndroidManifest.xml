@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.misachat">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".MisaChat"
         android:allowBackup="true"

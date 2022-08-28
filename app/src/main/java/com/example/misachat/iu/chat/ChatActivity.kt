@@ -4,11 +4,16 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.android.volley.Request
+import com.android.volley.RequestQueue
+import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.Volley
 import com.example.misachat.R
 import com.example.misachat.databinding.ActivityChatBinding
 import com.example.misachat.domain.model.Message
@@ -16,6 +21,9 @@ import com.example.misachat.iu.adapters.MessageRecyclerViewAdapter
 import com.example.misachat.iu.login.LoginActivity
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
+import org.json.JSONException
+import org.json.JSONObject
+import java.util.*
 
 @AndroidEntryPoint
 class ChatActivity : AppCompatActivity() {
@@ -62,6 +70,50 @@ class ChatActivity : AppCompatActivity() {
             )
             viewModel.sendMessage(message, chatId)
             binding.messageTextField.setText("")
+            notifyUser()
+        }
+    }
+
+    private fun notifyUser() {
+        val myRequest: RequestQueue = Volley.newRequestQueue(this)
+        val json: JSONObject = JSONObject()
+
+        try {
+            val token =
+                "eUvvVabdQc-MULkNvkQ-2x:APA91bG5lpMKDlDrqcOiq3uJdFcQIDvrwHlDfDvQ7Cku4UI9L-WNgfmyaLFYDkAaZlJIHGSu8vZfPu8sD63zMhaSR5gPIUS3DgStD8mIZK3YEcDuTw2wEsZwxl7zopvM3GapYVvHLBPZ"
+
+            val notification: JSONObject = JSONObject()
+            notification.put("title", "soy un titulo")
+            notification.put("detail", "soy el detalle")
+            json.put("data", notification)
+            json.put("to", token)
+
+            val URL = "https://fcm.googleapis.com/fcm/send"
+            val request: JsonObjectRequest = object: JsonObjectRequest(Request.Method.POST, URL, json,
+                { response->
+                    Log.i("prueba", response.toString())
+                },
+                { error ->
+                    Log.i("prueba", "hubo un error " + error.message.toString())
+                }
+            ) {
+                override fun getHeaders(): Map<String, String> {
+                    val headers = HashMap<String, String>()
+                    headers.put("Content-Type", "application/json")
+                    headers.put("Authorization", "key=AAAA6VFdRdo:APA91bGgFq1sZz90JlFNGzn6os2RyAKZPA2po-jdFNRfSyYnzK0cQ6iiyp1mAyyXyYf-0lfKTE_lzgVyOa-Ka-zZfwLji1Hkuumqrlxj8Iwq6-0SHB9AuSF5k2IL2RtKEWv8Ua52S-dL")
+                    return headers
+                }
+            }
+
+//                .also {
+//                it.headers["content-type"] = "application/json"
+//                it.headers["authorization"] =
+//                    "AAAA6VFdRdo:APA91bGgFq1sZz90JlFNGzn6os2RyAKZPA2po-jdFNRfSyYnzK0cQ6iiyp1mAyyXyYf-0lfKTE_lzgVyOa-Ka-zZfwLji1Hkuumqrlxj8Iwq6-0SHB9AuSF5k2IL2RtKEWv8Ua52S-dL"
+            //}
+
+            myRequest.add(request)
+        } catch (e: JSONException) {
+            Log.i("prueba", e.message.toString())
         }
     }
 
@@ -92,7 +144,10 @@ class ChatActivity : AppCompatActivity() {
 
                 // borrar datos
 
-                val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
+                val prefs = getSharedPreferences(
+                    getString(R.string.prefs_file),
+                    Context.MODE_PRIVATE
+                ).edit()
                 prefs.clear()
                 prefs.apply()
 
@@ -103,7 +158,8 @@ class ChatActivity : AppCompatActivity() {
                 startActivity(Intent(this, LoginActivity::class.java))
                 finish()
                 true
-            } else -> super.onOptionsItemSelected(item)
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 }
