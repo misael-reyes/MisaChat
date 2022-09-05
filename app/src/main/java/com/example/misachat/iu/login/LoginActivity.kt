@@ -6,16 +6,21 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import com.example.misachat.R
 import com.example.misachat.databinding.ActivityLoginBinding
+import com.example.misachat.domain.model.Token
 import com.example.misachat.iu.listOfChats.ListOfChatsActivity
 import com.example.misachat.iu.listOfChats.ProviderType
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -120,8 +125,23 @@ class LoginActivity : AppCompatActivity() {
             putExtra("email", email)
             putExtra("provider", provider.name)
         }
+        registerEmailForNotification(email)
         startActivity(intent)
         finish()
+    }
+
+    private fun registerEmailForNotification(email: String) {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Toast.makeText(this, "algo salio mal al recuperar el token del dispositivo", Toast.LENGTH_SHORT).show()
+                return@OnCompleteListener
+            }
+
+            // Get new FCM registration token
+            val token = task.result
+            Firebase.firestore.collection("users").document(email).collection("tokens").document(token).set(Token(token))
+        })
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

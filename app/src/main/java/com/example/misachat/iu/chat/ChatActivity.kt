@@ -17,9 +17,12 @@ import com.android.volley.toolbox.Volley
 import com.example.misachat.R
 import com.example.misachat.databinding.ActivityChatBinding
 import com.example.misachat.domain.model.Message
+import com.example.misachat.domain.model.Token
 import com.example.misachat.iu.adapters.MessageRecyclerViewAdapter
 import com.example.misachat.iu.login.LoginActivity
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 import org.json.JSONException
 import org.json.JSONObject
@@ -75,43 +78,50 @@ class ChatActivity : AppCompatActivity() {
     }
 
     private fun notifyUser() {
+        /**
+         * lo que hacemos aqui es hacer una peticion http con volley mandando el objeto json que nos indica la
+         * documentacion, para mas informacion consulta:
+         *
+         * https://firebase.google.com/docs/cloud-messaging/send-message#send-messages-using-the-legacy-app-server-protocols
+         */
         val myRequest: RequestQueue = Volley.newRequestQueue(this)
         val json: JSONObject = JSONObject()
+        var tokens : List<Token> = emptyList()
 
         try {
-            val token =
-                "eUvvVabdQc-MULkNvkQ-2x:APA91bG5lpMKDlDrqcOiq3uJdFcQIDvrwHlDfDvQ7Cku4UI9L-WNgfmyaLFYDkAaZlJIHGSu8vZfPu8sD63zMhaSR5gPIUS3DgStD8mIZK3YEcDuTw2wEsZwxl7zopvM3GapYVvHLBPZ"
+            val token = Firebase.firestore.collection("users").document(user).collection("tokens").get().addOnSuccessListener {
+                tokens = it.toObjects(Token::class.java)
 
-            val notification: JSONObject = JSONObject()
-            notification.put("title", "soy un titulo")
-            notification.put("detail", "soy el detalle")
-            json.put("data", notification)
-            json.put("to", token)
+                // "eUvvVabdQc-MULkNvkQ-2x:APA91bG5lpMKDlDrqcOiq3uJdFcQIDvrwHlDfDvQ7Cku4UI9L-WNgfmyaLFYDkAaZlJIHGSu8vZfPu8sD63zMhaSR5gPIUS3DgStD8mIZK3YEcDuTw2wEsZwxl7zopvM3GapYVvHLBPZ"
 
-            val URL = "https://fcm.googleapis.com/fcm/send"
-            val request: JsonObjectRequest = object: JsonObjectRequest(Request.Method.POST, URL, json,
-                { response->
-                    Log.i("prueba", response.toString())
-                },
-                { error ->
-                    Log.i("prueba", "hubo un error " + error.message.toString())
-                }
-            ) {
-                override fun getHeaders(): Map<String, String> {
-                    val headers = HashMap<String, String>()
-                    headers.put("Content-Type", "application/json")
-                    headers.put("Authorization", "key=AAAA6VFdRdo:APA91bGgFq1sZz90JlFNGzn6os2RyAKZPA2po-jdFNRfSyYnzK0cQ6iiyp1mAyyXyYf-0lfKTE_lzgVyOa-Ka-zZfwLji1Hkuumqrlxj8Iwq6-0SHB9AuSF5k2IL2RtKEWv8Ua52S-dL")
-                    return headers
-                }
+                val notification: JSONObject = JSONObject()
+                notification.put("title", "soy un titulo")
+                notification.put("detail", "soy el detalle")
+                json.put("data", notification)
+                json.put("to", tokens[0].token)
+
+                val URL = "https://fcm.googleapis.com/fcm/send"
+                val request: JsonObjectRequest =
+                    object : JsonObjectRequest(Request.Method.POST, URL, json,
+                        { response ->
+                            Log.i("prueba", response.toString())
+                        },
+                        { error ->
+                            Log.i("prueba", "hubo un error " + error.message.toString())
+                        }
+                    ) {
+                        override fun getHeaders(): Map<String, String> {
+                            val headers = HashMap<String, String>()
+                            headers.put("Content-Type", "application/json")
+                            headers.put(
+                                "Authorization",
+                                "key=AAAA6VFdRdo:APA91bGgFq1sZz90JlFNGzn6os2RyAKZPA2po-jdFNRfSyYnzK0cQ6iiyp1mAyyXyYf-0lfKTE_lzgVyOa-Ka-zZfwLji1Hkuumqrlxj8Iwq6-0SHB9AuSF5k2IL2RtKEWv8Ua52S-dL"
+                            )
+                            return headers
+                        }
+                    }
+                myRequest.add(request)
             }
-
-//                .also {
-//                it.headers["content-type"] = "application/json"
-//                it.headers["authorization"] =
-//                    "AAAA6VFdRdo:APA91bGgFq1sZz90JlFNGzn6os2RyAKZPA2po-jdFNRfSyYnzK0cQ6iiyp1mAyyXyYf-0lfKTE_lzgVyOa-Ka-zZfwLji1Hkuumqrlxj8Iwq6-0SHB9AuSF5k2IL2RtKEWv8Ua52S-dL"
-            //}
-
-            myRequest.add(request)
         } catch (e: JSONException) {
             Log.i("prueba", e.message.toString())
         }

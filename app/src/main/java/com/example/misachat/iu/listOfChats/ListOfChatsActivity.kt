@@ -112,7 +112,10 @@ class ListOfChatsActivity : AppCompatActivity() {
     }
 
     private fun onItemSelected(chat: Chat) {
-        navigateToChat(email ?: "", chat.id)
+        if (chat.users[0] == email)
+            navigateToChat(chat.users[1], chat.id)
+        else
+            navigateToChat(chat.users[0], chat.id)
     }
 
     // esto es para inflar el menu

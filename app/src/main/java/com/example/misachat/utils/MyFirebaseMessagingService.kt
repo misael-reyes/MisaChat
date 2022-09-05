@@ -41,7 +41,7 @@ class MyFirebaseMessagingService: FirebaseMessagingService() {
 
     private fun saveToken(token: String) {
         // guardaremos el token en la base de datos
-        Firebase.firestore.collection("tokens").document().set(token)
+        Firebase.firestore.collection("tokens").document(token).set(token)
     }
 
     /**
@@ -79,7 +79,8 @@ class MyFirebaseMessagingService: FirebaseMessagingService() {
     private fun createNotificationChannel() {
         /**
          * a partir de android o (8) se implementaron los canales para las
-         * notificaciones
+         * notificaciones, es por eso que tenemos primero que crear el canal
+         * de notificaciones
          */
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             // importancia de la notificación
