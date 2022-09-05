@@ -72,12 +72,12 @@ class ChatActivity : AppCompatActivity() {
                 from = user
             )
             viewModel.sendMessage(message, chatId)
+            notifyUser(message)
             binding.messageTextField.setText("")
-            notifyUser()
         }
     }
 
-    private fun notifyUser() {
+    private fun notifyUser(message: Message) {
         /**
          * lo que hacemos aqui es hacer una peticion http con volley mandando el objeto json que nos indica la
          * documentacion, para mas informacion consulta:
@@ -92,11 +92,9 @@ class ChatActivity : AppCompatActivity() {
             val token = Firebase.firestore.collection("users").document(user).collection("tokens").get().addOnSuccessListener {
                 tokens = it.toObjects(Token::class.java)
 
-                // "eUvvVabdQc-MULkNvkQ-2x:APA91bG5lpMKDlDrqcOiq3uJdFcQIDvrwHlDfDvQ7Cku4UI9L-WNgfmyaLFYDkAaZlJIHGSu8vZfPu8sD63zMhaSR5gPIUS3DgStD8mIZK3YEcDuTw2wEsZwxl7zopvM3GapYVvHLBPZ"
-
                 val notification: JSONObject = JSONObject()
-                notification.put("title", "soy un titulo")
-                notification.put("detail", "soy el detalle")
+                notification.put("title", message.from)
+                notification.put("detail", message.message)
                 json.put("data", notification)
                 json.put("to", tokens[0].token)
 
