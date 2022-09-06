@@ -36,7 +36,7 @@ class ChatRecyclerViewAdapter(
 
         fun render(item: Chat, onClickListener: (Chat) -> Unit) {
             binding.chatNameText.text = item.name
-            binding.usersTextView.text = item.users.toString()
+            binding.usersTextView.text = item.name
             itemView.setOnClickListener { onClickListener(item) }
         }
     }

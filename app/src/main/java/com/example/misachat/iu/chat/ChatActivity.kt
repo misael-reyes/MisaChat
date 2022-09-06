@@ -86,40 +86,46 @@ class ChatActivity : AppCompatActivity() {
          */
         val myRequest: RequestQueue = Volley.newRequestQueue(this)
         val json: JSONObject = JSONObject()
-        var tokens : List<Token> = emptyList()
+        var tokens: List<Token> = emptyList()
 
         try {
-            val token = Firebase.firestore.collection("users").document(user).collection("tokens").get().addOnSuccessListener {
-                tokens = it.toObjects(Token::class.java)
+            val token =
+                Firebase.firestore.collection("users").document(user).collection("tokens").get()
+                    .addOnSuccessListener {
 
-                val notification: JSONObject = JSONObject()
-                notification.put("title", message.from)
-                notification.put("detail", message.message)
-                json.put("data", notification)
-                json.put("to", tokens[0].token)
+                        tokens = it.toObjects(Token::class.java)
 
-                val URL = "https://fcm.googleapis.com/fcm/send"
-                val request: JsonObjectRequest =
-                    object : JsonObjectRequest(Request.Method.POST, URL, json,
-                        { response ->
-                            Log.i("prueba", response.toString())
-                        },
-                        { error ->
-                            Log.i("prueba", "hubo un error " + error.message.toString())
-                        }
-                    ) {
-                        override fun getHeaders(): Map<String, String> {
-                            val headers = HashMap<String, String>()
-                            headers.put("Content-Type", "application/json")
-                            headers.put(
-                                "Authorization",
-                                "key=AAAA6VFdRdo:APA91bGgFq1sZz90JlFNGzn6os2RyAKZPA2po-jdFNRfSyYnzK0cQ6iiyp1mAyyXyYf-0lfKTE_lzgVyOa-Ka-zZfwLji1Hkuumqrlxj8Iwq6-0SHB9AuSF5k2IL2RtKEWv8Ua52S-dL"
-                            )
-                            return headers
+                        if (tokens.isNotEmpty()) { // esto es por si el otro usario aun no se ha registrado en la app
+
+                            val notification: JSONObject = JSONObject()
+                            notification.put("title", message.from)
+                            notification.put("detail", message.message)
+                            json.put("data", notification)
+                            json.put("to", tokens[0].token)
+
+                            val URL = "https://fcm.googleapis.com/fcm/send"
+                            val request: JsonObjectRequest =
+                                object : JsonObjectRequest(Request.Method.POST, URL, json,
+                                    { response ->
+                                        Log.i("prueba", response.toString())
+                                    },
+                                    { error ->
+                                        Log.i("prueba", "hubo un error " + error.message.toString())
+                                    }
+                                ) {
+                                    override fun getHeaders(): Map<String, String> {
+                                        val headers = HashMap<String, String>()
+                                        headers.put("Content-Type", "application/json")
+                                        headers.put(
+                                            "Authorization",
+                                            "key=AAAA6VFdRdo:APA91bGgFq1sZz90JlFNGzn6os2RyAKZPA2po-jdFNRfSyYnzK0cQ6iiyp1mAyyXyYf-0lfKTE_lzgVyOa-Ka-zZfwLji1Hkuumqrlxj8Iwq6-0SHB9AuSF5k2IL2RtKEWv8Ua52S-dL"
+                                        )
+                                        return headers
+                                    }
+                                }
+                            myRequest.add(request)
                         }
                     }
-                myRequest.add(request)
-            }
         } catch (e: JSONException) {
             Log.i("prueba", e.message.toString())
         }
