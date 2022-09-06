@@ -12,4 +12,5 @@
     <string name="btn_facebook">Continuar con Facebook</string>
     <string name="hint_chat">Email para chatear</string>
     <string name="btn_chatear">Chatear</string>
+    <string name="text_message">Mensaje</string>
 </resources>

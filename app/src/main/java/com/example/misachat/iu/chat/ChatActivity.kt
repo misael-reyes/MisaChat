@@ -136,6 +136,8 @@ class ChatActivity : AppCompatActivity() {
         binding.messagesRecylerView.layoutManager = manager
         binding.messagesRecylerView.adapter =
             MessageRecyclerViewAdapter(messages, user)
+        // nos posicionamos en el ultimo mensaje enviado
+        (binding.messagesRecylerView.layoutManager as LinearLayoutManager).scrollToPosition(messages.size - 1)
     }
 
     // esto es para inflar el menu

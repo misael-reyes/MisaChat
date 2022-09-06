@@ -3,9 +3,13 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/emisa/AndroidStudioProjects/MisaChat/app/src/main/res/drawable/back_message.xml" value="0.37864583333333335" />
+        <entry key="..\:/Users/emisa/AndroidStudioProjects/MisaChat/app/src/main/res/drawable/btn_circle_static.xml" value="0.37864583333333335" />
+        <entry key="..\:/Users/emisa/AndroidStudioProjects/MisaChat/app/src/main/res/drawable/btn_presionado.xml" value="0.37864583333333335" />
+        <entry key="..\:/Users/emisa/AndroidStudioProjects/MisaChat/app/src/main/res/drawable/btn_sinpresionar.xml" value="0.37864583333333335" />
         <entry key="..\:/Users/emisa/AndroidStudioProjects/MisaChat/app/src/main/res/drawable/bubble_corner_left.xml" value="0.37864583333333335" />
         <entry key="..\:/Users/emisa/AndroidStudioProjects/MisaChat/app/src/main/res/drawable/bubble_corner_right.xml" value="0.37864583333333335" />
-        <entry key="..\:/Users/emisa/AndroidStudioProjects/MisaChat/app/src/main/res/layout/activity_chat.xml" value="0.17100371747211895" />
+        <entry key="..\:/Users/emisa/AndroidStudioProjects/MisaChat/app/src/main/res/layout/activity_chat.xml" value="0.25" />
         <entry key="..\:/Users/emisa/AndroidStudioProjects/MisaChat/app/src/main/res/layout/activity_list_of_chats.xml" value="0.25" />
         <entry key="..\:/Users/emisa/AndroidStudioProjects/MisaChat/app/src/main/res/layout/activity_login.xml" value="0.25" />
         <entry key="..\:/Users/emisa/AndroidStudioProjects/MisaChat/app/src/main/res/layout/activity_login2.xml" value="0.3484375" />
